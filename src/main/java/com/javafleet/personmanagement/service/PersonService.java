@@ -7,26 +7,36 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import net.datafaker.Faker;
 
 /**
  * Person Service mit Method Security
- * 
+ *
  * Demonstriert @PreAuthorize und @PostAuthorize für Authorization
  */
 @Service
 @RequiredArgsConstructor
 public class PersonService {
-    
+
     private final PersonRepository personRepository;
-    
+
     /**
      * Alle Persons abrufen - nur eingeloggte User
      */
     @PreAuthorize("isAuthenticated()")
     public List<Person> getAllPersons() {
+        if (personRepository.count() <= 4) {
+            Faker f = new Faker();
+            for (int i = 0; i < 50; i++) {
+                Person p = new Person(f.name().firstName(), f.name().lastName());
+                p.setEmail(p.getFirstname()+"."+p.getLastname()+"@web.de");
+                personRepository.save(p);
+
+            }
+        }
         return personRepository.findAll();
     }
-    
+
     /**
      * Person nach ID - nur Owner oder Admin
      */
@@ -35,7 +45,7 @@ public class PersonService {
         return personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found: " + id));
     }
-    
+
     /**
      * Neue Person erstellen - nur ADMIN
      */
@@ -43,7 +53,7 @@ public class PersonService {
     public Person createPerson(Person person) {
         return personRepository.save(person);
     }
-    
+
     /**
      * Person aktualisieren - nur Owner oder ADMIN
      */
@@ -51,14 +61,14 @@ public class PersonService {
     public Person updatePerson(Long id, Person personDetails) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found: " + id));
-        
+
         person.setFirstname(personDetails.getFirstname());
         person.setLastname(personDetails.getLastname());
         person.setEmail(personDetails.getEmail());
-        
+
         return personRepository.save(person);
     }
-    
+
     /**
      * Person löschen - nur Owner oder ADMIN
      */

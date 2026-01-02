@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <title>Persons - Verwaltung</title>
@@ -78,23 +77,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Max</td>
-                <td>Mustermann</td>
-                <td>max@example.com</td>
+            <tr th:each="person : ${personList}">
+                <td th:text="${person.id}"/>
+                <td th:text="${person.firstname}"/>
+                <td th:text="${person.lastname}"/>
+                <td th:text="${person.email}"/>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Erika</td>
-                <td>Musterfrau</td>
-                <td>erika@example.com</td>
-            </tr>
+           
         </tbody>
     </table>
     
     <p style="margin-top: 30px; color: #666;">
-        📝
+        📝 Hinweis: Dies ist eine statische Demo-Seite. Morgen in Tag 5 verbinden wir das mit der echten API!
     </p>
 </body>
 </html>

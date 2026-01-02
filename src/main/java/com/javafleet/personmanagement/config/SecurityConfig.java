@@ -58,8 +58,7 @@ public class SecurityConfig {
             )
             .httpBasic(basic -> {})
             .cors(cors -> cors.disable())
-            .csrf(csrf -> csrf.disable())
-               ;
+            .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }
